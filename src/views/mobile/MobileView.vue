@@ -11,7 +11,6 @@ import BlockCommentsPanel from "@/components/comment/BlockCommentsPanel.vue";
 import CommentThreadPanel from "@/components/comment/CommentThreadPanel.vue";
 import { useAuthorization } from "@/stores/authorization.ts";
 import Canvas from "@/components/canvas/MainCanvas.vue";
-import { repoManager } from "@/main.ts";
 import SelfAssemblyKeyPanel from "@/components/admin/SelfAssemblyKeyPanel.vue";
 
 const blocksStore = useBlocksStore();
@@ -66,16 +65,6 @@ const closeCard = async () => {
           :enabled="blocksStore.isEditing"
           @click="toggleGlobalEditing"
         ></MenuButton>
-        <MenuButton
-          v-if="authorization.isEditor"
-          @click="() => repoManager.changeRepositories('mock')"
-          >test</MenuButton
-        >
-        <MenuButton
-          v-if="authorization.isEditor"
-          @click="() => repoManager.changeRepositories('supabase')"
-          >real</MenuButton
-        >
         <!-- <MenuButton icon-name="profile"></MenuButton> -->
         <!-- тут основные кнопки: профиль, инфо, закладки -->
       </div>

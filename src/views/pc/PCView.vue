@@ -6,7 +6,6 @@ import CommentThreadPanel from "@/components/comment/CommentThreadPanel.vue";
 import MenuButton from "@/components/common/MenuButton.vue";
 import SearchBlock from "@/components/search/SearchBlock.vue";
 import SearchResults from "@/components/search/SearchResults.vue";
-import { repoManager } from "@/main";
 import { useAuthorization } from "@/stores/authorization";
 import { useBlocksStore } from "@/stores/blocks";
 import { useTransitionsStore } from "@/stores/transitions";
@@ -65,16 +64,6 @@ const closeCard = async () => {
             :enabled="blocksStore.isEditing"
             @click="toggleGlobalEditing"
           ></MenuButton>
-          <MenuButton
-            v-if="authorization.isEditor"
-            @click="() => repoManager.changeRepositories('mock')"
-            >test</MenuButton
-          >
-          <MenuButton
-            v-if="authorization.isEditor"
-            @click="() => repoManager.changeRepositories('supabase')"
-            >real</MenuButton
-          >
         </div>
         <div v-if="authorization.logged" class="profile">
           <div class="user-description">
