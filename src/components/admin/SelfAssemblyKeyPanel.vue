@@ -16,7 +16,10 @@ const createKey = async () => {
   error.value = undefined;
   try {
     await authorization.updateRoles();
-    const { data, error: rpcError } = await supabase.rpc("create_self_assembly_notification_key");
+    const { data, error: rpcError } = await supabase.rpc(
+      "create_self_assembly_notification_key_v2",
+      { p_request: crypto.randomUUID() },
+    );
     if (rpcError) throw rpcError;
     key.value = data;
   } catch (reason) {

@@ -105,3 +105,29 @@ alter publication supabase_realtime add table public.self_assembly_notifications
 
 -- Make newly created RPCs visible to PostgREST immediately after migration.
 select pg_notify('pgrst', 'reload schema');
+
+create or replace function public.create_self_assembly_notification_key_v2(p_request text default '')
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  raw_key text;
+begin
+  if auth.uid() is null or not exists (
+    select 1 from public.user_roles
+    where user_roles.user_id = auth.uid() and user_roles.role_id = 'admin'
+  ) then
+    raise exception 'admin role required';
+  end if;
+
+  raw_key := 'sam_' || encode(gen_random_bytes(24), 'hex');
+  insert into public.self_assembly_notification_keys (key_hash, created_by)
+  values (encode(digest(raw_key, 'sha256'), 'hex'), auth.uid());
+  return raw_key;
+end;
+$$;
+
+revoke all on function public.create_self_assembly_notification_key_v2(text) from public, anon;
+grant execute on function public.create_self_assembly_notification_key_v2(text) to authenticated;
