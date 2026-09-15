@@ -79,8 +79,11 @@ export const useAuthorization = defineStore("authorization", {
         .from("user_roles")
         .select("role_id")
         .eq("user_id", this.user.id);
-      if (error) return console.error(error);
-      // if (!data) return;
+      if (error) {
+        console.error(error);
+        this.roles = [];
+        return;
+      }
       this.roles = data.map((row) => row.role_id);
     },
   },
