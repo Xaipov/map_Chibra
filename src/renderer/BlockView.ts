@@ -75,6 +75,11 @@ import safeIcon from "@/assets/icons/block/safe.svg?raw";
 import stairsIcon from "@/assets/icons/block/stairs.svg?raw";
 import theatreIcon from "@/assets/icons/block/theatre.svg?raw";
 import boardIcon from "@/assets/icons/block/card/board.svg?raw";
+import destroyedTypeIcon from "@/assets/icons/block-type/destroyed.svg?raw";
+import frozenTypeIcon from "@/assets/icons/block-type/frozen.svg?raw";
+import infectedTypeIcon from "@/assets/icons/block-type/infected.svg?raw";
+import mushroomTypeIcon from "@/assets/icons/block-type/mushroom.svg?raw";
+import residentialTypeIcon from "@/assets/icons/block-type/residential.svg?raw";
 
 const ICONS = {
   liquidator: rIcon(liquidatorIcon),
@@ -94,6 +99,14 @@ const ICONS = {
   stairs: rIcon(stairsIcon),
   ladder: rIcon(ladderIcon),
   elevator: rIcon(elevatorIcon),
+} as const;
+
+const BLOCK_TYPE_ICONS = {
+  residential: rIcon(residentialTypeIcon),
+  frozen: rIcon(frozenTypeIcon),
+  infected: rIcon(infectedTypeIcon),
+  destroyed: rIcon(destroyedTypeIcon),
+  mushroom: rIcon(mushroomTypeIcon),
 } as const;
 
 const nameTextStyle = new TextStyle({
@@ -519,6 +532,8 @@ export class BlockView {
   private readonly canCreateGlow: Graphics;
   private readonly selection: Graphics;
   private readonly canCreateHighlight: Graphics;
+  private readonly canCreateBadge: Graphics;
+  private readonly canCreateBadgeIcon: Graphics;
 
   // Части-контейнеры: их позиции зависят от направления блока и должны
   // обновляться в sync(), а не только в конструкторе.
@@ -589,6 +604,12 @@ export class BlockView {
     this.floorContainer.addChild(this.staticFloor);
     this.floorContainer.addChild(this.canCreateGlow);
     this.floorContainer.addChild(this.canCreateHighlight);
+    this.canCreateBadge = new Graphics();
+    this.canCreateBadge.visible = false;
+    this.floorContainer.addChild(this.canCreateBadge);
+    this.canCreateBadgeIcon = makeIcon(ICONS.generator, 30, 0, 0);
+    this.canCreateBadgeIcon.visible = false;
+    this.floorContainer.addChild(this.canCreateBadgeIcon);
 
     const vertical = isVertical(direction);
     const shiftX = vertical ? -1 : 0;
@@ -727,6 +748,13 @@ export class BlockView {
         8,
         CAN_CREATE_HIGHLIGHT_COLOR,
       );
+      this.canCreateBadge.context = getRoundRectStrokeContext(
+        52,
+        52,
+        12,
+        5,
+        CAN_CREATE_HIGHLIGHT_COLOR,
+      );
       const [blockW, blockH] = getBlockSizes(direction);
       this.selection.context = getRoundRectStrokeContext(blockW, blockH, 10, 10, 0x00ffff);
     }
@@ -789,6 +817,17 @@ export class BlockView {
     const canCreateActive = isCanCreateActive(block);
     this.canCreateGlow.visible = canCreateActive;
     this.canCreateHighlight.visible = canCreateActive;
+    this.canCreateBadge.visible = canCreateActive;
+    this.canCreateBadgeIcon.visible = canCreateActive;
+    if (canCreateActive) {
+      this.canCreateBadge.position.set(floorW - 62, -18);
+      configureIcon(this.canCreateBadgeIcon, {
+        path: BLOCK_TYPE_ICONS[block.type ?? "residential"],
+        size: 30,
+        x: floorW - 36,
+        y: 8,
+      });
+    }
 
     // Название и подпись этажа
     setText(this.nameText, block.name);
