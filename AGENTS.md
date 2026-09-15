@@ -32,6 +32,10 @@
 
 Утилиты: `src/utils/canCreate.ts` (getCanCreateStatus, isCanCreateTemporary, isCanCreateExpired, getCanCreateExpiry)
 
+Активный самосбор не меняет базовую цветовую схему блока: `src/renderer/BlockView.ts`
+рисует поверх блока отдельную фиолетовую рамку со свечением. Временная метка,
+создаваемая без явно заданного срока, действует 5 минут.
+
 RPC для мода: `public.update_can_create_from_mod(block_id, can_create, expires_hours)` — см. `supabase/migrations/20260914120000_add_mod_can_create_rpc.sql`
 
 

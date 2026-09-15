@@ -381,8 +381,7 @@ const setText = (text: Text, value: string) => {
   if (text.text !== value) text.text = value;
 };
 
-const CAN_CREATE_MAIN_COLOR = "#9B59B6";
-const CAN_CREATE_BG_COLOR = "#D8B4E2";
+const CAN_CREATE_HIGHLIGHT_COLOR = 0x9b59b6;
 
 const isCanCreateActive = (block: BlockData): boolean => {
   const status = getCanCreateStatus(block);
@@ -390,11 +389,8 @@ const isCanCreateActive = (block: BlockData): boolean => {
 };
 
 const mainColorOf = (block: BlockData): ColorSource =>
-  isCanCreateActive(block)
-    ? CAN_CREATE_MAIN_COLOR
-    : (colors[block.name.charAt(0)]?.main ?? "#767676");
-const bgColorOf = (block: BlockData): ColorSource =>
-  isCanCreateActive(block) ? CAN_CREATE_BG_COLOR : (colors[block.name.charAt(0)]?.bg ?? "#A8A8A8");
+  colors[block.name.charAt(0)]?.main ?? "#767676";
+const bgColorOf = (block: BlockData): ColorSource => colors[block.name.charAt(0)]?.bg ?? "#A8A8A8";
 
 const hasPlace = (block: BlockData, place: PlaceType) =>
   block.places?.find(({ type }) => type === place) !== undefined;
@@ -520,7 +516,9 @@ export class BlockView {
   private readonly floodText: Text;
 
   private readonly dynamicFloor: Container;
+  private readonly canCreateGlow: Graphics;
   private readonly selection: Graphics;
+  private readonly canCreateHighlight: Graphics;
 
   // Части-контейнеры: их позиции зависят от направления блока и должны
   // обновляться в sync(), а не только в конструкторе.
@@ -574,9 +572,23 @@ export class BlockView {
     this.bg.filters = [this.shadowFilter];
     this.floorContainer.addChild(this.bg);
 
+    this.canCreateGlow = new Graphics(
+      getRoundRectStrokeContext(floorW, floorH, 10, 18, CAN_CREATE_HIGHLIGHT_COLOR),
+    );
+    this.canCreateGlow.alpha = 0.28;
+    this.canCreateGlow.visible = false;
+
+    this.canCreateHighlight = new Graphics(
+      getRoundRectStrokeContext(floorW, floorH, 10, 8, CAN_CREATE_HIGHLIGHT_COLOR),
+    );
+    this.canCreateHighlight.alpha = 0.9;
+    this.canCreateHighlight.visible = false;
+
     // Статичный облик этажа (кешированный GraphicsContext)
     this.staticFloor = new Graphics();
     this.floorContainer.addChild(this.staticFloor);
+    this.floorContainer.addChild(this.canCreateGlow);
+    this.floorContainer.addChild(this.canCreateHighlight);
 
     const vertical = isVertical(direction);
     const shiftX = vertical ? -1 : 0;
@@ -701,6 +713,20 @@ export class BlockView {
     if (bgKey !== this.bgSizeKey) {
       this.bgSizeKey = bgKey;
       this.bg.context = getRoundRectFillContext(floorW, floorH, 10, "#FFFFFF");
+      this.canCreateGlow.context = getRoundRectStrokeContext(
+        floorW,
+        floorH,
+        10,
+        18,
+        CAN_CREATE_HIGHLIGHT_COLOR,
+      );
+      this.canCreateHighlight.context = getRoundRectStrokeContext(
+        floorW,
+        floorH,
+        10,
+        8,
+        CAN_CREATE_HIGHLIGHT_COLOR,
+      );
       const [blockW, blockH] = getBlockSizes(direction);
       this.selection.context = getRoundRectStrokeContext(blockW, blockH, 10, 10, 0x00ffff);
     }
@@ -760,6 +786,9 @@ export class BlockView {
       this.lastShadowColor = shadowColor;
       this.shadowFilter.boxShadow = `0 0 20px 20px ${shadowColor}`;
     }
+    const canCreateActive = isCanCreateActive(block);
+    this.canCreateGlow.visible = canCreateActive;
+    this.canCreateHighlight.visible = canCreateActive;
 
     // Название и подпись этажа
     setText(this.nameText, block.name);

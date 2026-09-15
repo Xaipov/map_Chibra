@@ -16,8 +16,11 @@ export type CanCreateStatus =
   | "expired"
   | undefined;
 
+/** Срок жизни временного статуса по умолчанию (в минутах). */
+export const CAN_CREATE_TEMPORARY_MINUTES = 5;
+
 /** Срок жизни временного статуса по умолчанию (в часах). */
-export const CAN_CREATE_TEMPORARY_HOURS = 1;
+export const CAN_CREATE_TEMPORARY_HOURS = CAN_CREATE_TEMPORARY_MINUTES / 60;
 
 /** ISO-дата истечения временного статуса. */
 export const getCanCreateExpiry = (hours = CAN_CREATE_TEMPORARY_HOURS): string =>
