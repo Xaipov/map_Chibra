@@ -2,10 +2,8 @@ import { BoxShadowFilter } from "pixi-box-shadow";
 import {
   Container,
   Graphics,
-  Sprite,
   Text,
   TextStyle,
-  Texture,
   type ColorSource,
   type GraphicsContext,
 } from "pixi.js";
@@ -77,7 +75,7 @@ import safeIcon from "@/assets/icons/block/safe.svg?raw";
 import stairsIcon from "@/assets/icons/block/stairs.svg?raw";
 import theatreIcon from "@/assets/icons/block/theatre.svg?raw";
 import boardIcon from "@/assets/icons/block/card/board.svg?raw";
-import selfAssemblyMaskIcon from "@/assets/icons/block/self_assembly_mask.svg";
+import selfAssemblyMaskIcon from "@/assets/icons/block/self_assembly_mask.svg?raw";
 
 const ICONS = {
   liquidator: rIcon(liquidatorIcon),
@@ -368,14 +366,6 @@ const configureIcon = (icon: Graphics, item: IconItem): Graphics => {
   return icon;
 };
 
-const configureImageIcon = (icon: Sprite, size: number, x: number, y: number): Sprite => {
-  icon.width = size;
-  icon.height = size;
-  icon.position.set(x, y);
-  icon.visible = true;
-  return icon;
-};
-
 /** Text с белым шрифтом, центрированный в точке (x, y). */
 const makeText = (text: string, x: number, y: number, style: TextStyle): Text => {
   const node = new Text({
@@ -533,7 +523,7 @@ export class BlockView {
   private readonly selection: Graphics;
   private readonly canCreateHighlight: Graphics;
   private readonly canCreateBadge: Graphics;
-  private readonly canCreateBadgeIcon: Sprite;
+  private readonly canCreateBadgeIcon: Graphics;
 
   // Части-контейнеры: их позиции зависят от направления блока и должны
   // обновляться в sync(), а не только в конструкторе.
@@ -613,11 +603,7 @@ export class BlockView {
     this.canCreateBadge = new Graphics();
     this.canCreateBadge.visible = false;
     this.floorContainer.addChild(this.canCreateBadge);
-    this.canCreateBadgeIcon = new Sprite({
-      texture: Texture.from(selfAssemblyMaskIcon),
-      anchor: 0.5,
-    });
-    this.canCreateBadgeIcon.eventMode = "none";
+    this.canCreateBadgeIcon = makeIcon(selfAssemblyMaskIcon, 58, 0, 0);
     this.canCreateBadgeIcon.visible = false;
 
     const vertical = isVertical(direction);
@@ -839,12 +825,12 @@ export class BlockView {
     this.canCreateBadge.visible = false;
     this.canCreateBadgeIcon.visible = canCreateActive;
     if (canCreateActive) {
-      configureImageIcon(
-        this.canCreateBadgeIcon,
-        Math.min(floorW, floorH) - 24,
-        floorW / 2,
-        floorH / 2,
-      );
+      configureIcon(this.canCreateBadgeIcon, {
+        path: selfAssemblyMaskIcon,
+        size: Math.min(floorW, floorH) - 24,
+        x: floorW / 2,
+        y: floorH / 2,
+      });
     }
 
     // Название и подпись этажа
