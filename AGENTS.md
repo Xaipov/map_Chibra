@@ -46,9 +46,10 @@ RPC для мода: `public.update_can_create_from_mod(block_id, can_create, ex
 Интеграция внешнего мода и рекомендуемый сценарий проверки самосбора:
 `EXTERNAL_MOD_INTEGRATION.md`
 
-Администраторский ключ уведомлений самосбора создаётся в интерфейсе и принимается
-RPC `public.receive_self_assembly_notification`; подробности описаны в
-`EXTERNAL_MOD_INTEGRATION.md`.
+Администраторский ключ уведомлений самосбора хранится вне репозитория в
+локальном защищённом файле. Публичная документация не должна содержать сам
+секрет. Уведомления принимает RPC `public.receive_self_assembly_notification`;
+подробности описаны в `EXTERNAL_MOD_INTEGRATION.md`.
 
 GitHub Pages для репозитория `Xaipov/map_Chibra` собирается из ветки `main` с
 base URL `/map_Chibra/`.
