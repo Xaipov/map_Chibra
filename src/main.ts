@@ -41,7 +41,7 @@ const repositoryType =
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY ? "supabase" : "mock";
 
 if (repositoryType === "mock") {
-  useAuthorization().roles = ["editor"];
+  useAuthorization().roles = ["editor", "admin"];
   console.warn("Supabase variables are missing; using mock repositories.");
 }
 

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { supabase } from "@/supabase";
+import { useSelfAssemblyNotifications } from "@/stores/selfAssemblyNotifications";
 
 const key = ref<string>();
 const error = ref<string>();
 const creating = ref(false);
+const notifications = useSelfAssemblyNotifications();
+const isLocal = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 const createKey = async () => {
   creating.value = true;
@@ -30,6 +33,8 @@ const createKey = async () => {
     </button>
     <code v-if="key">{{ key }}</code>
     <small v-if="key">Скопируйте ключ сейчас и храните его в защищённом месте.</small>
+    <button v-if="isLocal" @click="notifications.showTestNotification">Тестовое уведомление</button>
+    <small v-if="isLocal">Локальный режим: Supabase не настроен.</small>
     <span v-if="error" class="error">{{ error }}</span>
   </section>
 </template>

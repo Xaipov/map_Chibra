@@ -16,6 +16,17 @@ export const useSelfAssemblyNotifications = defineStore("selfAssemblyNotificatio
     unread: 0,
   }),
   actions: {
+    showTestNotification() {
+      this.latest = {
+        id: Date.now(),
+        block_id: 42,
+        can_create: true,
+        message: "Тест: фиолетовые партиклы подтверждены",
+        observed_at: new Date().toISOString(),
+        received_at: new Date().toISOString(),
+      };
+      this.unread += 1;
+    },
     subscribe() {
       const channel = supabase
         .channel("self-assembly-notifications")
