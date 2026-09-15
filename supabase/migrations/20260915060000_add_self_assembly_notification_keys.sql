@@ -102,3 +102,6 @@ grant execute on function public.receive_self_assembly_notification(text, bigint
   to anon, authenticated, service_role;
 
 alter publication supabase_realtime add table public.self_assembly_notifications;
+
+-- Make newly created RPCs visible to PostgREST immediately after migration.
+select pg_notify('pgrst', 'reload schema');
