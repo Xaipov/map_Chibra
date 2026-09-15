@@ -12,6 +12,7 @@ import CommentThreadPanel from "@/components/comment/CommentThreadPanel.vue";
 import { useAuthorization } from "@/stores/authorization.ts";
 import Canvas from "@/components/canvas/MainCanvas.vue";
 import { repoManager } from "@/main.ts";
+import SelfAssemblyKeyPanel from "@/components/admin/SelfAssemblyKeyPanel.vue";
 
 const blocksStore = useBlocksStore();
 const transitionsStore = useTransitionsStore();
@@ -95,6 +96,7 @@ const closeCard = async () => {
           @click="authorization.signOut"
         ></MenuButton>
       </div>
+      <SelfAssemblyKeyPanel v-if="authorization.hasAnyRole(['admin'])" />
       <BlockCard
         v-if="blocksStore.selectedBlockId"
         :block-id="blocksStore.selectedBlockId"

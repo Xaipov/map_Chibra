@@ -76,6 +76,36 @@ Content-Type: application/json
 Подробное описание RPC, Edge Function и альтернативного PATCH-сценария
 находится в [MOD_INTEGRATION.md](./MOD_INTEGRATION.md).
 
+## Ключ уведомлений для администратора
+
+Администратор карты может создать ключ в панели **«Уведомления о самосборе»**.
+Ключ показывается только один раз — сохраните его в защищённом хранилище мода.
+В базе хранится только SHA-256 хеш ключа, поэтому восстановить его через карту
+нельзя. При утечке ключа администратор должен отозвать его в Supabase и создать
+новый (интерфейс отзыва будет добавлен отдельно).
+
+Внешний мод передаёт уведомление через RPC:
+
+```http
+POST https://<PROJECT_REF>.supabase.co/rest/v1/rpc/receive_self_assembly_notification
+Authorization: Bearer <SUPABASE_ANON_OR_SERVICE_ROLE_KEY>
+apikey: <SUPABASE_ANON_OR_SERVICE_ROLE_KEY>
+Content-Type: application/json
+
+{
+  "p_key": "sam_<generated-key>",
+  "p_block_id": 42,
+  "p_can_create": true,
+  "p_message": "Фиолетовые партиклы подтверждены",
+  "p_observed_at": "2026-09-15T02:00:00.000Z"
+}
+```
+
+RPC возвращает идентификатор уведомления. После вставки запись появляется в
+`self_assembly_notifications` через Supabase Realtime. Для отправки с клиента
+мода используйте только отдельный защищённый ключ Supabase; `service_role`
+нельзя помещать в мод, распространяемый игрокам.
+
 ## Надёжность и безопасность
 
 - Не доверяйте одному факту появления партиклов: всегда спрашивайте игрока.

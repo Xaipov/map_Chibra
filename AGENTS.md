@@ -40,6 +40,10 @@ RPC для мода: `public.update_can_create_from_mod(block_id, can_create, ex
 Интеграция внешнего мода и рекомендуемый сценарий проверки самосбора:
 `EXTERNAL_MOD_INTEGRATION.md`
 
+Администраторский ключ уведомлений самосбора создаётся в интерфейсе и принимается
+RPC `public.receive_self_assembly_notification`; подробности описаны в
+`EXTERNAL_MOD_INTEGRATION.md`.
+
 ## Стек
 
 - Vite
