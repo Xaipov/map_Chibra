@@ -619,7 +619,6 @@ export class BlockView {
     });
     this.canCreateBadgeIcon.eventMode = "none";
     this.canCreateBadgeIcon.visible = false;
-    this.floorContainer.addChild(this.canCreateBadgeIcon);
 
     const vertical = isVertical(direction);
     const shiftX = vertical ? -1 : 0;
@@ -709,6 +708,8 @@ export class BlockView {
     // Динамический слой (иконки пролётов, лестницы проходов) — перестраивается при смене этажа
     this.dynamicFloor = new Container();
     this.floorContainer.addChild(this.dynamicFloor);
+    // Keep the central self-assembly image above floor details and dynamic icons.
+    this.floorContainer.addChild(this.canCreateBadgeIcon);
 
     // Рамка выделения
     const [blockW, blockH] = getBlockSizes(direction);
