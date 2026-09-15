@@ -2,17 +2,20 @@
 import { ref } from "vue";
 import { supabase } from "@/supabase";
 import { useSelfAssemblyNotifications } from "@/stores/selfAssemblyNotifications";
+import { useAuthorization } from "@/stores/authorization";
 
 const key = ref<string>();
 const error = ref<string>();
 const creating = ref(false);
 const notifications = useSelfAssemblyNotifications();
+const authorization = useAuthorization();
 const isLocal = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 const createKey = async () => {
   creating.value = true;
   error.value = undefined;
   try {
+    await authorization.updateRoles();
     const { data, error: rpcError } = await supabase.rpc("create_self_assembly_notification_key");
     if (rpcError) throw rpcError;
     key.value = data;
