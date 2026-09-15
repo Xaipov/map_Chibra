@@ -821,15 +821,14 @@ export class BlockView {
     this.canCreateGlow.visible = canCreateActive;
     this.canCreateOutline.visible = canCreateActive;
     this.canCreateHighlight.visible = canCreateActive;
-    this.canCreateBadge.visible = canCreateActive;
+    this.canCreateBadge.visible = false;
     this.canCreateBadgeIcon.visible = canCreateActive;
     if (canCreateActive) {
-      this.canCreateBadge.position.set(floorW - 62, -18);
       configureIcon(this.canCreateBadgeIcon, {
         path: selfAssemblyMaskIcon,
-        size: 58,
-        x: floorW - 36,
-        y: 8,
+        size: Math.min(floorW, floorH) - 24,
+        x: floorW / 2,
+        y: floorH / 2,
       });
     }
 
