@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { useAuthorization } from "./stores/authorization.ts";
+import { useSelfAssemblyNotifications } from "./stores/selfAssemblyNotifications";
+import SelfAssemblyNotification from "@/components/common/SelfAssemblyNotification.vue";
 import View from "./views/MainView.vue";
 
 const authorization = useAuthorization();
 let unsubscribe: () => void;
+let unsubscribeNotifications: () => void;
 onMounted(async () => {
   unsubscribe = await authorization.subscribe();
+  unsubscribeNotifications = useSelfAssemblyNotifications().subscribe();
 });
 
 onUnmounted(() => {
   unsubscribe();
+  unsubscribeNotifications();
 });
 </script>
 
 <template>
   <div class="content">
     <View></View>
+    <SelfAssemblyNotification />
   </div>
 </template>
 
