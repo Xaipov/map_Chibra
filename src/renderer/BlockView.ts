@@ -77,7 +77,7 @@ import safeIcon from "@/assets/icons/block/safe.svg?raw";
 import stairsIcon from "@/assets/icons/block/stairs.svg?raw";
 import theatreIcon from "@/assets/icons/block/theatre.svg?raw";
 import boardIcon from "@/assets/icons/block/card/board.svg?raw";
-import selfAssemblyMaskIcon from "@/assets/icons/block/self_assembly_mask.png";
+import selfAssemblyMaskIcon from "@/assets/icons/block/self_assembly_mask.svg";
 
 const ICONS = {
   liquidator: rIcon(liquidatorIcon),
