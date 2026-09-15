@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: write # необходимо для записи в ветку gh-pages
@@ -30,7 +30,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
-          VITE_BASE_URL: "/map/"
+          VITE_BASE_URL: "/map_Chibra/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

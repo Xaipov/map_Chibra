@@ -44,6 +44,9 @@ RPC для мода: `public.update_can_create_from_mod(block_id, can_create, ex
 RPC `public.receive_self_assembly_notification`; подробности описаны в
 `EXTERNAL_MOD_INTEGRATION.md`.
 
+GitHub Pages для репозитория `Xaipov/map_Chibra` собирается из ветки `main` с
+base URL `/map_Chibra/`.
+
 ## Стек
 
 - Vite
