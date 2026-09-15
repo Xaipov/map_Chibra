@@ -831,6 +831,7 @@ export class BlockView {
         x: floorW / 2,
         y: floorH / 2,
       });
+      this.canCreateBadgeIcon.scale.y = -Math.abs(this.canCreateBadgeIcon.scale.y);
     }
 
     // Название и подпись этажа
