@@ -33,7 +33,9 @@
 Утилиты: `src/utils/canCreate.ts` (getCanCreateStatus, isCanCreateTemporary, isCanCreateExpired, getCanCreateExpiry)
 
 Активный самосбор не меняет базовую цветовую схему блока: `src/renderer/BlockView.ts`
-рисует поверх блока отдельную фиолетовую рамку со свечением. Временная метка,
+рисует поверх блока контрастную двойную рамку: широкую чёрную и яркую
+токсично-фиолетовую. Рядом показывается прозрачный значок газовой маски с
+чёрной внешней и токсично-фиолетовой внутренней обводкой. Временная метка,
 создаваемая без явно заданного срока, действует 5 минут.
 
 RPC для мода: `public.update_can_create_from_mod(block_id, can_create, expires_hours)` — см. `supabase/migrations/20260914120000_add_mod_can_create_rpc.sql`
