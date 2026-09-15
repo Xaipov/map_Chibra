@@ -9,7 +9,6 @@ import SearchResults from "@/components/search/SearchResults.vue";
 import { useAuthorization } from "@/stores/authorization";
 import { useBlocksStore } from "@/stores/blocks";
 import { useTransitionsStore } from "@/stores/transitions";
-import SelfAssemblyKeyPanel from "@/components/admin/SelfAssemblyKeyPanel.vue";
 
 const authorization = useAuthorization();
 const blocksStore = useBlocksStore();
@@ -78,7 +77,6 @@ const closeCard = async () => {
             @click="authorization.signOut"
           ></MenuButton>
         </div>
-        <SelfAssemblyKeyPanel v-if="authorization.hasAnyRole(['admin'])" />
         <SearchBlock></SearchBlock>
         <BlockCard
           v-if="blocksStore.selectedBlockId"
