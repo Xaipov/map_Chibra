@@ -2,7 +2,7 @@
 import type { BlockRepository } from "./repo";
 import type { BlockData, BlockUid } from "@/types/block";
 import type { BlocksStore } from "@/stores/blocks";
-import { generateBlocks } from "@/repository/block/blocks_mock";
+import { importedBlocks } from "@/repository/importedMap";
 
 export class MockBlockRepository implements BlockRepository {
   private store!: BlocksStore;
@@ -15,7 +15,7 @@ export class MockBlockRepository implements BlockRepository {
 
   async init(store: BlocksStore): Promise<void> {
     this.store = store;
-    const blocks = this.initialBlocks ?? generateBlocks(600);
+    const blocks = this.initialBlocks ?? importedBlocks;
     this.store.blocks = blocks;
     this.nextId = Math.max(0, ...blocks.map((b) => b.id)) + 1;
   }

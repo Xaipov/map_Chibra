@@ -1,6 +1,7 @@
 import type { TransitionRepository } from "@/repository/transition/repo";
 import type { TransitionData, TransitionId } from "@/types/transition";
 import type { TransitionsStore } from "@/stores/transitions";
+import { importedTransitions } from "@/repository/importedMap";
 
 export class MockTransitionRepository implements TransitionRepository {
   private store!: TransitionsStore;
@@ -8,8 +9,8 @@ export class MockTransitionRepository implements TransitionRepository {
 
   async init(store: TransitionsStore): Promise<void> {
     this.store = store;
-    // Стартуем с пустым списком или с каким-то начальным
-    store.transitions = [];
+    store.transitions = importedTransitions.map((transition) => ({ ...transition }));
+    this.nextId = Math.max(0, ...store.transitions.map(({ id }) => id)) + 1;
   }
 
   destroy(): void {}
